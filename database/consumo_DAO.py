@@ -72,3 +72,44 @@ class ConsumoDAO:
 
         return result
 
+    @staticmethod
+    def get_consumi_settimana(mese):
+
+        cnx = ConnessioneDB.get_connection()
+        result = []
+
+        if cnx is None:
+            print("❌ Errore di connessione al database.")
+            return None
+
+        cursor = cnx.cursor(dictionary=True)
+        query = """ SELECT i.nome, kwh as prezzo_giorno
+			        FROM impianto i, consumo c 
+			        WHERE id_impianto = id 
+			        GROUP BY i.nome, c.data 
+			        having MONTH(c.data)=%s and DAY(c.data)<8;
+                        """
+
+        try:
+            consumi_settimana ={}
+            cursor.execute(query, (mese,))
+            for row in cursor:
+                impianto = row["nome"]
+                prezzo_giorno = row["prezzo_giorno"]
+
+                if impianto not in consumi_settimana:
+                    consumi_settimana[impianto] = []
+                consumi_settimana[impianto].append(prezzo_giorno)
+
+            result.append(consumi_settimana)
+
+
+        except Exception as e:
+            print(f"Errore durante la query get_media_consumi: {e}")
+            result = None
+        finally:
+            cursor.close()
+            cnx.close()
+
+        return result
+

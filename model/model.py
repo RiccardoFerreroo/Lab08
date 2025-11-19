@@ -30,7 +30,7 @@ class Model:
         return lista_dati_medie
 
 
-        # TODO
+
 
     def get_sequenza_ottima(self, mese:int):
         """
@@ -51,6 +51,15 @@ class Model:
 
     def __ricorsione(self, sequenza_parziale, giorno, ultimo_impianto, costo_corrente, consumi_settimana):
         """ Implementa la ricorsione """
+        prezzo_finora = []
+        if giorno == 7:
+            self.__costo_ottimo = prezzo_finora
+            self.__sequenza_ottima.append(sequenza_parziale)
+        else :
+            for impianto in consumi_settimana:
+                for prezzo in impianto:
+                    if prezzo - costo_corrente > :
+
         # TODO
 
     def __get_consumi_prima_settimana_mese(self, mese: int):
@@ -58,5 +67,8 @@ class Model:
         Restituisce i consumi dei primi 7 giorni del mese selezionato per ciascun impianto.
         :return: un dizionario: {id_impianto: [kwh_giorno1, ..., kwh_giorno7]}
         """
+        lista_consumi_settimana = ConsumoDAO.get_consumi_settimana(mese)
+        return lista_consumi_settimana
+
         # TODO
 
