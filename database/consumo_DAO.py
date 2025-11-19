@@ -39,3 +39,36 @@ class ConsumoDAO:
             cnx.close()
 
         return result
+    @staticmethod
+    def get_media_consumi( mese):
+
+        cnx = ConnessioneDB.get_connection()
+        result = []
+
+        if cnx is None:
+            print("❌ Errore di connessione al database.")
+            return None
+
+        cursor = cnx.cursor(dictionary=True)
+        query = """ SELECT i.nome, avg(c.kwh)as media
+			        FROM impianto i, consumo c 
+			        WHERE id_impianto = id and MONTH(c.data)=%s
+			        GROUP BY i.nome;
+                    """
+
+        try:
+            cursor.execute(query, (mese,))
+            for row in cursor:
+                dati_medie = (row["nome"], row["media"])
+                result.append(dati_medie)
+
+
+        except Exception as e:
+            print(f"Errore durante la query get_media_consumi: {e}")
+            result = None
+        finally:
+            cursor.close()
+            cnx.close()
+
+        return result
+

@@ -1,3 +1,4 @@
+from database.consumo_DAO import ConsumoDAO
 from database.impianto_DAO import ImpiantoDAO
 
 '''
@@ -25,6 +26,10 @@ class Model:
         :param mese: Mese selezionato (un intero da 1 a 12)
         :return: lista di tuple --> (nome dell'impianto, media), es. (Impianto A, 123)
         """
+        lista_dati_medie = ConsumoDAO.get_media_consumi(mese)
+        return lista_dati_medie
+
+
         # TODO
 
     def get_sequenza_ottima(self, mese:int):
