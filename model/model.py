@@ -39,26 +39,50 @@ class Model:
         :return: costo ottimale (cioè quello minimizzato dalla sequenza scelta)
         """
         self.__sequenza_ottima = []
-        self.__costo_ottimo = -1
+        self.__costo_ottimo = float('inf')
         consumi_settimana = self.__get_consumi_prima_settimana_mese(mese)
 
         self.__ricorsione([], 1, None, 0, consumi_settimana)
 
         # Traduci gli ID in nomi
-        id_to_nome = {impianto.id: impianto.nome for impianto in self._impianti}
-        sequenza_nomi = [f"Giorno {giorno}: {id_to_nome[i]}" for giorno, i in enumerate(self.__sequenza_ottima, start=1)]
+       # id_to_nome = {impianto.id: impianto.nome for impianto in self._impianti}
+        sequenza_nomi = [f"Giorno {giorno}: {i}" for giorno, i in enumerate(self.__sequenza_ottima, start=1)]
         return sequenza_nomi, self.__costo_ottimo
 
     def __ricorsione(self, sequenza_parziale, giorno, ultimo_impianto, costo_corrente, consumi_settimana):
         """ Implementa la ricorsione """
-        prezzo_finora = []
-        if giorno == 7:
-            self.__costo_ottimo = prezzo_finora
-            self.__sequenza_ottima.append(sequenza_parziale)
-        else :
-            for impianto in consumi_settimana:
-                for prezzo in impianto:
-                    if prezzo - costo_corrente > :
+
+        if giorno == 8:
+            if costo_corrente < self.__costo_ottimo:
+                self.__costo_ottimo = costo_corrente
+                self.__sequenza_ottima = list(sequenza_parziale)
+            return # ritorna alla parte prima del pop()
+        #prova ogni impianto per il giorno corrente
+
+
+        for impianto, consumi in consumi_settimana.items():
+            costo =  consumi[giorno-1]
+
+            #se cambio impianto costo = +5
+            if ultimo_impianto is not None and impianto != ultimo_impianto:
+                costo += 5
+            # se già peggio del migliore taglia ( se costa di più )
+            if costo_corrente + costo >= self.__costo_ottimo:
+                continue
+            sequenza_parziale.append(impianto)
+            self.__ricorsione(sequenza_parziale, giorno+1,
+                              impianto,
+                              costo_corrente+costo,
+                              consumi_settimana
+                              )
+            sequenza_parziale.pop()
+
+
+
+
+
+
+
 
         # TODO
 

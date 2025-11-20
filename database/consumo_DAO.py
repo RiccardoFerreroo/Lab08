@@ -76,7 +76,7 @@ class ConsumoDAO:
     def get_consumi_settimana(mese):
 
         cnx = ConnessioneDB.get_connection()
-        result = []
+
 
         if cnx is None:
             print("❌ Errore di connessione al database.")
@@ -101,15 +101,15 @@ class ConsumoDAO:
                     consumi_settimana[impianto] = []
                 consumi_settimana[impianto].append(prezzo_giorno)
 
-            result.append(consumi_settimana)
+
 
 
         except Exception as e:
             print(f"Errore durante la query get_media_consumi: {e}")
-            result = None
+            consumi_settimana = None
         finally:
             cursor.close()
             cnx.close()
 
-        return result
+        return consumi_settimana
 
